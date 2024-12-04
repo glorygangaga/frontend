@@ -1,0 +1,16 @@
+.slides {
+  display: grid;
+  grid-template-columns: 17rem auto;
+  transition: all .3s ease-in-out;
+  gap: 20px;
+  flex: 1 1 auto;
+
+  &.active {
+    grid-template-columns: 2rem auto;
+  }
+}
+
+.active__slide_show {
+  width: 100%;
+  height: max-content;
+}

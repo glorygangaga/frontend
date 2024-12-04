@@ -1,0 +1,165 @@
+.active_slide_show {
+  height: 100%;
+  min-height: 100%;
+  padding: 20px;
+  border: 1px solid rgb(201, 201, 201);
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+
+.slide_active {
+  position: relative;
+  border: 1px solid rgb(201, 201, 201);
+  max-width: 1400px;
+  margin: 0 auto;
+  aspect-ratio: 16 / 9;
+
+  & h1 {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.element {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  &.change {
+    &:hover .changeble_elem {
+      display: block;
+    }
+  }
+}
+
+.changeElement {
+  opacity: 0;
+  display: flex;
+  gap: 10px;
+  visibility: hidden;
+  position: absolute;
+  right: 0;
+  top: 101%;
+  min-height: 40px;
+  background-color: #fff;
+  border-radius: 5px;
+  transition: all .3s ease-in-out;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+  padding: 5px 10px;
+  &:hover, &:active {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.element__inner {
+  position: relative;
+  z-index: 1;
+  outline: none;
+  resize: none;
+  overflow: hidden;
+  background-color: transparent;
+  border: none;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  &.change {
+    &:focus ~ .changeElement,
+    &:active ~ .changeElement
+    {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}
+
+.image__inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  &.change {
+    cursor: move;
+    &:hover ~ .changeElement,
+    &:hover ~ .changeble_elem
+    {
+      opacity: 1;
+      visibility: visible;
+    }
+  
+  }
+}
+
+.textColor {
+  width: 25px;
+  height: 25px;
+}
+
+.deleteBtn {
+  background-color: transparent;
+}
+
+.changeble_elem {
+  border: 1px solid #34b2d3;
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+  cursor: move;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  display: none;
+
+  & > span {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    background-color: transparent;
+
+    &::after {
+      content: '';
+      width: 0.5vw;
+      height: 0.5vw;
+      position: absolute;
+      background-color: white;
+
+      border: 1px solid #34b2d3;
+
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 4;
+    }
+
+    &:nth-child(1),
+    &:nth-child(8) {
+      cursor: se-resize;
+    }
+
+    &:nth-child(4),
+    &:nth-child(5) {
+      cursor:ew-resize;
+    }
+
+    &:nth-child(3),
+    &:nth-child(6) {
+      cursor:ne-resize;
+    }
+
+    &:nth-child(2),
+    &:nth-child(7) {
+      cursor:ns-resize;
+    }
+  }
+}
