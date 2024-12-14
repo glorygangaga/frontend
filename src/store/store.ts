@@ -1,24 +1,21 @@
-import { Presentation } from "../types/types";
-import {EditorType} from "./EditorType.ts";
+import { configureStore, combineReducers, createListenerMiddleware } from '@reduxjs/toolkit'
+import { reducer as PresentationReducer } from './slices/presentation.slice';
+import { ImageApi } from './api/image.api';
 
-const getPresentationFromLocalStorage = () => {
-  const presentationLS = localStorage.getItem('presentation') || '{}';
-  const presentation = JSON.parse(presentationLS);
-  
-  if ('id' in presentation && 'title' in presentation && 'slides' in presentation && Array.isArray(presentation.slides))
-    return presentation;
-  return null;
-}
+const reducer = combineReducers({
+  presentation: PresentationReducer,
+  [ImageApi.reducerPath] : ImageApi.reducer,
+});
 
-const presentation: Presentation = getPresentationFromLocalStorage() || {
-  id: 0,
-  title: 'Presentation',
-  slides: [{ id: 0, background: { type: 'solid' }, info: [] }],
-};
+const listenerMiddleware = createListenerMiddleware();
 
-export const editor: EditorType = {
-  presentation,
-  selection: {
-    selectedSlideId: presentation.slides[0]?.id || null,
-  }
-}
+export const store = configureStore({
+  reducer,
+  middleware: getDefaultMiddleware => 
+    getDefaultMiddleware({serializableCheck: false})
+      .prepend(listenerMiddleware.middleware)
+      .concat(ImageApi.middleware)
+});
+
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch

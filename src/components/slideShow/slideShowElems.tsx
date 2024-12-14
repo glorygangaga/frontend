@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useRef } from 'react';
 import classNames from 'classnames';
 
 import styles from './slideShow.module.scss';
@@ -12,12 +12,21 @@ type SlideShowElemsTypes = {
   element: Image | TextElement;
   elementRect: elementRectType;
   isSlidesElement?: boolean;
+  containerRef: React.RefObject<HTMLDivElement>;
 };
 
-const SlideShowElems: FC<SlideShowElemsTypes> = ({ element, elementRect, isSlidesElement }) => {
+const SlideShowElems: FC<SlideShowElemsTypes> = ({
+  element,
+  elementRect,
+  isSlidesElement,
+  containerRef,
+}) => {
+  const ref = useRef<HTMLDivElement>(null);
+
   return (
     <>
       <div
+        ref={ref}
         className={classNames(styles.element, !isSlidesElement && styles.change)}
         style={{
           left: `${element.position.x}%`,
@@ -38,10 +47,11 @@ const SlideShowElems: FC<SlideShowElemsTypes> = ({ element, elementRect, isSlide
               element={element}
               elementRect={elementRect}
               isSlidesElement={isSlidesElement}
+              containerRef={containerRef}
             />
           )
         )}
-        <ResizebleButtons />
+        <ResizebleButtons refMain={ref} elementRect={elementRect} id={element.id} />
       </div>
     </>
   );

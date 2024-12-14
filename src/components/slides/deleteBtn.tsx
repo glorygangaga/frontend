@@ -1,17 +1,15 @@
 import { FC } from 'react';
 
 import styles from './slides.module.scss';
-import { dispatch } from '../../store/editor';
-import { removeSlide } from '../../store/removeSlide';
+import { useAppDispatch } from '../../hooks/redux';
+import { actions } from '../../store/slices/presentation.slice';
 
-type deleteBtnTypeProps = {
-  slideId: number;
-};
+const DeliteBtn: FC = () => {
+  const dispatch = useAppDispatch();
 
-const DeliteBtn: FC<deleteBtnTypeProps> = ({ slideId }) => {
   const deleteSlide = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
-    dispatch(removeSlide, { selectedSlideId: slideId });
+    dispatch(actions.removeSlide());
   };
 
   return (

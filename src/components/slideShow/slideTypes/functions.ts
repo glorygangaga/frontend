@@ -1,0 +1,23 @@
+export const options = Array.from({ length: 90 / 4 + 1 }, (_, index) => 6 + index * 4);
+export const fontOptions: { type: string; font: string }[] = [
+  { type: 'sans-serif', font: 'Helvetica' },
+  { type: 'sans-serif', font: 'Arial' },
+  { type: 'sans-serif', font: 'Arial Black' },
+  { type: 'sans-serif', font: 'Verdana' },
+  { type: 'sans-serif', font: 'Tahoma' },
+  { type: 'sans-serif', font: 'Trebuchet MS' },
+  { type: 'sans-serif', font: 'Impact' },
+  { type: 'sans-serif', font: 'Gill Sans' },
+  { type: 'serif', font: 'Times New Roman' },
+  { type: 'serif', font: 'Georgia' },
+  { type: 'serif', font: 'Palatino' },
+  { type: 'serif', font: 'Baskerville' },
+  { type: 'fantasy', font: 'Luminari' },
+  { type: 'monospace', font: 'Andalé Mono' },
+  { type: 'monospace', font: 'Courier' },
+  { type: 'monospace', font: 'Lucida' },
+  { type: 'monospace', font: 'Monaco' },
+  { type: 'cursive', font: 'Comic Sans MS' },
+  { type: 'cursive', font: 'Brush Script MT' },
+  { type: 'cursive', font: 'Bradley Hand' },
+];

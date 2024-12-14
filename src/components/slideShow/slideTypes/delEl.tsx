@@ -1,16 +1,18 @@
 import { FC } from 'react';
 
 import styles from '../slideShow.module.scss';
-import { dispatch } from '../../../store/editor';
-import { deleteSlideElement } from '../../../store/deleteSlideElement';
+import { useAppDispatch } from '../../../hooks/redux';
+import { actions } from '../../../store/slices/presentation.slice';
 
 type DelElProps = {
   id: number;
 };
 
 const DelEl: FC<DelElProps> = ({ id }) => {
+  const dispatch = useAppDispatch();
+
   const deleteElement = () => {
-    dispatch(deleteSlideElement, { id });
+    dispatch(actions.removeSlideElement(id));
   };
 
   return (

@@ -4,9 +4,19 @@
   margin-bottom: 5px;
 
   &_info {
+    position: relative;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
+  }
+
+  &_isOpen {
+    position: absolute;
+    top: 0;
+    left: -10px;
+    font-size: 2rem;
+    color: red;
   }
 
   &_main {

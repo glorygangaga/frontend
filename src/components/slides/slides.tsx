@@ -2,57 +2,74 @@ import { FC, useState } from 'react';
 import classNames from 'classnames';
 
 import styles from './slides.module.scss';
-import { Presentation } from '../../types/types';
 import Slide from './slide';
-import { dispatch } from '../../store/editor';
-import { addSlide } from '../../store/addSlide';
 import NavbarIcon from '../ui/navbarIcon';
 import ChangePositionSlide from './changePositionSlide';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { actions } from '../../store/slices/presentation.slice';
 
 type slidesProps = {
-  presentation: Presentation;
-  activeId: number | null;
   active: boolean;
-  setActvie: React.Dispatch<React.SetStateAction<boolean>>;
+  setActive: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const Slides: FC<slidesProps> = ({ presentation, activeId, active, setActvie }) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+export type isDraggingType = {
+  isDrag: boolean;
+  id: null | number;
+};
 
-  const addIntoSlide = () => {
-    dispatch(addSlide, {
-      presentation,
-    });
-  };
+const Slides: FC<slidesProps> = ({ active, setActive }) => {
+  const dispatch = useAppDispatch();
+  const activeId = useAppSelector((state) => state.presentation.selection.selectedSlideId);
+  const presentation = useAppSelector((state) => state.presentation.presentation);
+
+  const [isDragging, setIsDragging] = useState<isDraggingType>({ isDrag: false, id: null });
+
+  const addIntoSlide = () => dispatch(actions.addSlide());
 
   return (
-    <div className={classNames(styles.slides, active && styles.active)}>
+    <article className={classNames(styles.slides, active && styles.active)}>
       <button
         className={classNames(styles.slides_navbar_btn, active && styles.active)}
-        onClick={() => setActvie((prev) => !prev)}
+        onClick={() => setActive((prev) => !prev)}
       >
         <NavbarIcon />
       </button>
       <div className={classNames(styles.slide_show, active && styles.active)}>
         <ul className={styles.slide_boxes}>
-          {isOpen && activeId !== 0 && <ChangePositionSlide id={0} />}
+          {isDragging.isDrag &&
+            isDragging.id !== null &&
+            activeId !== 0 &&
+            activeId !== isDragging.id && (
+              <ChangePositionSlide id={presentation.slides[0].id} activeId={isDragging.id} />
+            )}
           {!!presentation.slides.length &&
             presentation.slides.map((slide, i) => (
-              <div key={slide.id}>
-                <Slide index={i + 1} slide={slide} activeId={activeId} setIsOpen={setIsOpen} />
-                {isOpen && activeId !== slide.id && activeId !== slide.id + 1 && (
-                  <ChangePositionSlide id={slide.id + 1} />
-                )}
-              </div>
+              <li key={slide.id}>
+                <Slide
+                  index={i + 1}
+                  slide={slide}
+                  activeId={activeId}
+                  setIsDragging={setIsDragging}
+                />
+                {isDragging.isDrag &&
+                  isDragging.id !== null &&
+                  activeId !== null &&
+                  activeId !== isDragging.id && (
+                    <ChangePositionSlide id={slide.id} activeId={isDragging.id} />
+                  )}
+              </li>
             ))}
         </ul>
-        <div className={styles.slide_new}>
-          <div className={styles.slide_main_new}>
-            <button onClick={addIntoSlide}>Add new Slide</button>
+        {!isDragging.isDrag && (
+          <div className={styles.slide_new}>
+            <div className={styles.slide_main_new}>
+              <button onClick={addIntoSlide}>Add new Slide</button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
-    </div>
+    </article>
   );
 };
 

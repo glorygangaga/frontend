@@ -35,11 +35,13 @@
 .changeElement {
   opacity: 0;
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   visibility: hidden;
   position: absolute;
   right: 0;
   top: 101%;
+  max-width: 240px;
   min-height: 40px;
   background-color: #fff;
   border-radius: 5px;
@@ -52,9 +54,38 @@
   }
 }
 
+.changeIndex {
+  & > button {
+    background-color: transparent;
+  }
+
+  & svg {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+.select {
+  max-height: 50px;
+  overflow-y: auto;
+}
+
+.isBold {
+  padding: 5px 10px;
+  background-color: transparent;
+  border-radius: 5px; 
+  border: 1px solid rgba(128, 128, 128, 0.35);
+  transition: all .3s ease-in-out;
+  font-size: 1rem;
+
+  &.active {
+    text-decoration: underline;
+    font-weight: bold;
+  }
+}
+
 .element__inner {
   position: relative;
-  z-index: 1;
   outline: none;
   resize: none;
   overflow: hidden;
@@ -66,6 +97,10 @@
   justify-content: center;
   align-items: center;
   text-align: center;
+
+  &::placeholder {
+    text-align: center;
+  }
 
   &.change {
     &:focus ~ .changeElement,
@@ -119,6 +154,7 @@
   transform: translate(-50%, -50%);
   position: absolute;
   display: none;
+  z-index: 0;
 
   & > span {
     position: absolute;

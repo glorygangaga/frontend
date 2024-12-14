@@ -6,6 +6,8 @@ import { Image } from '../../../types/types';
 import DelEl from './delEl';
 import { ChangePosition, changeShiftPosition } from '../functions';
 import { elementRectType, shiftPositionType } from '../hooks';
+import { useAppDispatch } from '../../../hooks/redux';
+import ChangeIndex from './changeIndex';
 
 type ImageSlideProps = {
   element: Image;
@@ -14,23 +16,28 @@ type ImageSlideProps = {
 };
 
 const ImageSlide: FC<ImageSlideProps> = ({ element, isSlidesElement, elementRect }) => {
+  const dispatch = useAppDispatch();
   const [shiftPosition, setShiftPosition] = useState<shiftPositionType>({ x: 0, y: 0 });
 
   return (
     <>
       <img
         draggable={!isSlidesElement}
-        onDragStart={(e) => changeShiftPosition(e, setShiftPosition)}
+        style={{ zIndex: element.index }}
+        onDragStart={(e) => !isSlidesElement && changeShiftPosition(e, setShiftPosition)}
         onDragEnd={(e) =>
-          !isSlidesElement && ChangePosition(elementRect, element.id, e, shiftPosition)
+          !isSlidesElement && ChangePosition(elementRect, element.id, e, shiftPosition, dispatch)
         }
         src={element.src}
         alt='image'
         className={classNames(styles.image__inner, !isSlidesElement && styles.change)}
       />
-      <div className={styles.changeElement}>
-        <DelEl id={element.id} />
-      </div>
+      {!isSlidesElement && (
+        <div className={styles.changeElement}>
+          <ChangeIndex id={element.id} />
+          <DelEl id={element.id} />
+        </div>
+      )}
     </>
   );
 };

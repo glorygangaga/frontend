@@ -1,23 +1,24 @@
 import { FC } from 'react';
 
 import styles from './slideShow.module.scss';
-import { Presentation } from '../../types/types';
 import SlideShowElems from './slideShowElems';
 import { useChangeElementRect } from './hooks';
+import { useAppSelector } from '../../hooks/redux';
 
 type SlideShowProps = {
-  activeId: number | null;
   containerRef: React.RefObject<HTMLDivElement>;
-  presentation: Presentation;
 };
 
-const SlideShow: FC<SlideShowProps> = ({ presentation, activeId, containerRef }) => {
+const SlideShow: FC<SlideShowProps> = ({ containerRef }) => {
+  const presentation = useAppSelector((state) => state.presentation.presentation);
+  const activeId = useAppSelector((state) => state.presentation.selection.selectedSlideId);
+
   const elementRect = useChangeElementRect(containerRef, activeId);
 
   return (
-    <div className={styles.active_slide_show}>
+    <section className={styles.active_slide_show}>
       {activeId !== null && (
-        <div
+        <article
           ref={containerRef}
           className={styles.slide_active}
           style={{
@@ -35,11 +36,16 @@ const SlideShow: FC<SlideShowProps> = ({ presentation, activeId, containerRef })
           {presentation.slides
             .find((slide) => slide.id === activeId)
             ?.info?.map((info) => (
-              <SlideShowElems key={info.id} element={info} elementRect={elementRect} />
+              <SlideShowElems
+                key={info.id}
+                element={info}
+                elementRect={elementRect}
+                containerRef={containerRef}
+              />
             ))}
-        </div>
+        </article>
       )}
-    </div>
+    </section>
   );
 };
 
